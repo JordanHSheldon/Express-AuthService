@@ -1,13 +1,18 @@
 // Importing modules
 const express = require("express");
 const mongoose = require('mongoose'), User = require('./userModel').User;
- 
+var cors = require('cors')
 const jwt = require("jsonwebtoken");
  
 const app = express();
-const PORT = 3000;
+const PORT = 3003;
 app.use(express.json());
- 
+const corsOptions ={
+   origin:'*', 
+   credentials:true,            //access-control-allow-credentials:true
+   optionSuccessStatus:200,
+}
+app.use(cors(corsOptions));
 // Handling post request
 app.post("/login", async (req, res, next) => {
   let { username, password } = req.body;
@@ -48,12 +53,15 @@ app.post("/login", async (req, res, next) => {
       },
     });
 });
- 
+
 // Handling post request
 app.post("/signup", async (req, res, next) => {
-  const { name, email, password } = req.body;
+  console.log(req)
+  const { fname, lname, username, email, password } = req.body;
   const newUser = new User({
-    name,
+    fname,
+    lname,
+    username,
     email,
     password,
   });
@@ -89,7 +97,7 @@ mongoose
   .connect("mongodb://0.0.0.0:27017/mydb")
   .then(() => {
     app.listen(PORT, () => {
-      console.log("Server is listening on port 3000");
+      console.log(`Server is listening on port ${PORT}`);
     });
   })
   .catch((err) => {
