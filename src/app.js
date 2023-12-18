@@ -12,7 +12,9 @@ const corsOptions ={
    credentials:true,            //access-control-allow-credentials:true
    optionSuccessStatus:200,
 }
+
 app.use(cors(corsOptions));
+
 // Handling post request
 app.post("/login", async (req, res, next) => {
   let { username, password } = req.body;
@@ -65,7 +67,8 @@ app.post("/signup", async (req, res, next) => {
     email,
     password,
   });
- 
+  
+    
   try {
     await newUser.save();
   } catch {
@@ -92,14 +95,18 @@ app.post("/signup", async (req, res, next) => {
     });
 });
  
-//Connecting to the database
-mongoose
-  .connect("mongodb://0.0.0.0:27017/mydb")
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server is listening on port ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.log("Error Occurred", err);
-  });
+// Connecting to the database    
+// mongoose
+//   .connect("mongodb://0.0.0.0:27017/mydb")
+//   .then(() => {
+//     app.listen(PORT, () => {
+//       console.log(`Server is listening on port ${PORT}`);
+//     });
+//   })
+//   .catch((err) => {
+//     console.log("Error Occurred", err);
+//   });
+
+app.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
+});
