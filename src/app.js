@@ -68,7 +68,6 @@ app.post("/signup", async (req, res, next) => {
     password,
   });
   
-    
   try {
     await newUser.save();
   } catch {
@@ -92,6 +91,15 @@ app.post("/signup", async (req, res, next) => {
       success: true,
       data: { userId: newUser.id,
           email: newUser.email, token: token },
+    });
+});
+
+app.post("/admin/manage-users", async (req, res, next) => {
+  res
+    .status(200)
+    .json({
+      success: true,
+      data: { userId: "not yes implemented." },
     });
 });
  
