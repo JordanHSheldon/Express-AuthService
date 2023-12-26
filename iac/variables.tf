@@ -25,7 +25,7 @@ variable "container_name_prefix" {
 variable "image" {
   type        = string
   description = "Container image to deploy. Should be of the form repoName/imagename:tag for images stored in public Docker Hub, or a fully qualified URI for other registries. Images from private registries require additional registry credentials."
-  default     = "mcr.microsoft.com/azuredocs/aci-helloworld"
+  default     = "jordanhsheldon/queso"
 }
 
 variable "port" {
@@ -55,3 +55,5 @@ variable "restart_policy" {
     error_message = "The restart_policy must be one of the following: Always, Never, OnFailure."
   }
 }
+
+

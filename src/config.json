@@ -1,10 +1,12 @@
 {
     "Secrets":{
         "Vault":{
-         
+            "vault_password":"",
+            "vault_username":""
         },
         "Azure":{
-            
+            "sql_password":"",
+            "sql_username":""
         }
     }
 }

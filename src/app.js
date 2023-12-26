@@ -3,22 +3,24 @@ const express = require("express");
 const mongoose = require('mongoose'), User = require('./userModel').User;
 var cors = require('cors')
 const jwt = require("jsonwebtoken");
- 
+
 const app = express();
 const PORT = 3003;
+
+
 app.use(express.json());
 const corsOptions ={
    origin:'*', 
-   credentials:true,            //access-control-allow-credentials:true
+   credentials:true,
    optionSuccessStatus:200,
 }
 
 app.use(cors(corsOptions));
 
-// Handling post request
+// Handling login requests
 app.post("/login", async (req, res, next) => {
   let { username, password } = req.body;
- 
+
   let existingUser;
   try {
     existingUser = await User.findOne({ username: username });
@@ -32,7 +34,6 @@ app.post("/login", async (req, res, next) => {
   }
   let token;
   try {
-    //Creating jwt token
     token = jwt.sign(
       { userId: existingUser.id, username: existingUser.username },
       "secretkeyappearshere",
@@ -56,9 +57,8 @@ app.post("/login", async (req, res, next) => {
     });
 });
 
-// Handling post request
+// Handling signup requests
 app.post("/signup", async (req, res, next) => {
-  console.log(req)
   const { fname, lname, username, email, password } = req.body;
   const newUser = new User({
     fname,
@@ -69,6 +69,11 @@ app.post("/signup", async (req, res, next) => {
   });
   
   try {
+    let existingUser = await User.findOne({ username: username });
+    if (existingUser) {
+      const error = new Error("User already exists!");
+      return next(error);
+    }
     await newUser.save();
   } catch {
     const error = new Error("Error! Something went wrong.");
@@ -104,16 +109,16 @@ app.post("/admin/manage-users", async (req, res, next) => {
 });
  
 // Connecting to the database    
-// mongoose
-//   .connect("mongodb://0.0.0.0:27017/mydb")
-//   .then(() => {
-//     app.listen(PORT, () => {
-//       console.log(`Server is listening on port ${PORT}`);
-//     });
-//   })
-//   .catch((err) => {
-//     console.log("Error Occurred", err);
-//   });
+mongoose
+  .connect("mongodb://0.0.0.0:27017/mydb")
+  .then(() => {
+    app.listen(PORT, '127.0.0.1', () => {
+      console.log(`Server is listening on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.log("Error Occurred", err);
+  });
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
